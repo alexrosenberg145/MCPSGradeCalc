@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            color: #333;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .input-group input {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 20px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Class Grade Calculator</h1>
+    <div class="input-group">
+        <label for="aaScores">AA Scores (comma-separated):</label>
+        <input type="text" id="aaScores" placeholder="e.g., 85,90,78">
+    </div>
+    <div class="input-group">
+        <label for="aaMaxScores">AA Max Scores (comma-separated):</label>
+        <input type="text" id="aaMaxScores" placeholder="e.g., 100,100,100">
+    </div>
+    <div class="input-group">
+        <label for="ppScores">PP Scores (comma-separated):</label>
+        <input type="text" id="ppScores" placeholder="e.g., 8,9,7">
+    </div>
+    <div class="input-group">
+        <label for="ppMaxScores">PP Max Scores (comma-separated):</label>
+        <input type="text" id="ppMaxScores" placeholder="e.g., 10,10,10">
+    </div>
+    <button onclick="calculateGrade()">Calculate Grade</button>
+    <h2 id="result"></h2>
+
+    <script>
+        function calculateGrade() {
+            // Get input values
+            let aaScores = document.getElementById('aaScores').value.split(',').map(Number);
+            let aaMaxScores = document.getElementById('aaMaxScores').value.split(',').map(Number);
+            let ppScores = document.getElementById('ppScores').value.split(',').map(Number);
+            let ppMaxScores = document.getElementById('ppMaxScores').value.split(',').map(Number);
+
+            // Validate inputs
+            if (aaScores.includes(NaN) || aaMaxScores.includes(NaN) || ppScores.includes(NaN) || ppMaxScores.includes(NaN)) {
+                document.getElementById('result').innerText = 'Please enter valid numbers for all fields.';
+                return;
+            }
+
+            // Calculate total and percentage for AA
+            let totalAaScore = aaScores.reduce((a, b) => a + b, 0);
+            let totalAaMax = aaMaxScores.reduce((a, b) => a + b, 0);
+            let aaPercentage = (totalAaScore / totalAaMax) * 100 || 0;
+
+            // Calculate total and percentage for PP
+            let totalPpScore = ppScores.reduce((a, b) => a + b, 0);
+            let totalPpMax = ppMaxScores.reduce((a, b) => a + b, 0);
+            let ppPercentage = (totalPpScore / totalPpMax) * 100 || 0;
+            let ppPercentageWeighted = ppPercentage * 0.1;
+
+            // Calculate final grade
+            let finalPercentage = (0.9 * aaPercentage) + ppPercentageWeighted;
+
+            // Display result
+            document.getElementById('result').innerText = `Your final class grade is: ${finalPercentage.toFixed(2)}%`;
+        }
+    </script>
+</body>
+</html>
